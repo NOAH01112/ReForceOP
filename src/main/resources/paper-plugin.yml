@@ -1,0 +1,5 @@
+name: ReForceOp
+version: '${version}'
+main: kr.pah.reforceop.reforceop.ReForceOp
+api-version: '1.20'
+load: STARTUP
