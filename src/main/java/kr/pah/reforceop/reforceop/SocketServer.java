@@ -19,27 +19,28 @@ public class SocketServer {
             serverSocket = new ServerSocket(port);
             running = true;
             logger.warning("SocketServer가 구동되었습니다!");
-            startServer(logger);
+            startServer();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void startServer(Logger logger) {
+    private void startServer() {
         new Thread(() -> {
             try {
                 while (running) {
                     Socket clientSocket = serverSocket.accept();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                    String command = reader.readLine();
-
-                    if (command != null && !command.isEmpty()) {
-                        logger.info("Socket 명령어 실행 : " + command);
-                        Bukkit.getScheduler().runTask(this.plugin, () ->
-                                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command)
-                        );
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+                        String command;
+                        while ((command = reader.readLine()) != null) {
+                            final String cmd = command;
+                            Bukkit.getScheduler().runTask(this.plugin, () ->
+                                    Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd)
+                            );
+                        }
+                    } finally {
+                        clientSocket.close();
                     }
-                    clientSocket.close();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
