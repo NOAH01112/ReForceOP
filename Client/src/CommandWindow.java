@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -32,20 +30,10 @@ public class CommandWindow {
         frame.setLayout(new BorderLayout());
 
         commandTextField = new JTextField();
-        commandTextField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sendCommand();
-            }
-        });
+        commandTextField.addActionListener(e -> sendCommand());
 
         sendButton = new JButton("Send");
-        sendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sendCommand();
-            }
-        });
+        sendButton.addActionListener(e -> sendCommand());
 
         historyTextArea = new JTextArea(10, 30);
         historyTextArea.setEditable(false);

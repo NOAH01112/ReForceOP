@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
@@ -18,12 +17,7 @@ public class ServerConnectWindow {
         portTextField = new JTextField(5);
         connectButton = new JButton("Connect");
 
-        ActionListener connectListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                connectToServer();
-            }
-        };
+        ActionListener connectListener = e -> connectToServer();
 
         ipTextField.addActionListener(connectListener);
         portTextField.addActionListener(connectListener);
