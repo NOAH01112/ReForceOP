@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Logger;
 
 public class SocketServer {
@@ -28,18 +29,24 @@ public class SocketServer {
     private void startServer() {
         new Thread(() -> {
             try {
-                while (running) {
-                    Socket clientSocket = serverSocket.accept();
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
-                        String command;
-                        while ((command = reader.readLine()) != null) {
-                            final String cmd = command;
-                            Bukkit.getScheduler().runTask(this.plugin, () ->
-                                    Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd)
-                            );
+                while (!serverSocket.isClosed()) {
+                    try {
+                        Socket clientSocket = serverSocket.accept();
+                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+                            String command;
+                            while ((command = reader.readLine()) != null) {
+                                final String cmd = command;
+                                Bukkit.getScheduler().runTask(this.plugin, () ->
+                                        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd)
+                                );
+                            }
                         }
-                    } finally {
-                        clientSocket.close();
+                    } catch (SocketException e) {
+                        if (serverSocket.isClosed()) {
+                            break;
+                        } else {
+                            throw e;
+                        }
                     }
                 }
             } catch (Exception e) {
