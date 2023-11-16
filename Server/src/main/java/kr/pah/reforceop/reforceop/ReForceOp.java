@@ -7,8 +7,7 @@ public final class ReForceOp extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        socketServer = new SocketServer(this, 1234, getLogger());
-        getLogger().info("플러그인이 활성화 되었습니다.");
+        socketServer = new SocketServer(this, 1234);
     }
 
     @Override
