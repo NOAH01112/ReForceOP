@@ -18,12 +18,16 @@ public class ServerConnectWindow {
         portTextField = new JTextField(5);
         connectButton = new JButton("Connect");
 
-        connectButton.addActionListener(new ActionListener() {
+        ActionListener connectListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 connectToServer();
             }
-        });
+        };
+
+        ipTextField.addActionListener(connectListener);
+        portTextField.addActionListener(connectListener);
+        connectButton.addActionListener(connectListener);
 
         frame.add(new JLabel("Server IP:"));
         frame.add(ipTextField);
