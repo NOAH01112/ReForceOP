@@ -14,11 +14,12 @@ public class SocketServer {
     private boolean running;
     private JavaPlugin plugin;
 
-    public SocketServer(JavaPlugin plugin, int port) {
+    public SocketServer(JavaPlugin plugin, int port, Logger logger) {
         this.plugin = plugin;
         try {
             serverSocket = new ServerSocket(port);
             running = true;
+            logger.warning("SocketServer가 구동되었습니다!");
             startServer();
         } catch (Exception e) {
             e.printStackTrace();
